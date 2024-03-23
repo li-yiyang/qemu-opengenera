@@ -20,17 +20,18 @@ qemu-install: img/genera.img img/cidata.iso
 
 img/genera.img:
 	curl -L $(CLOUD_IMG_LINK) -o $@
+	qemu-img resize $@ 20G
 
 img/cidata.iso: meta-data user-data provision.sh snap4.tar.gz opengenera2.tar.gz provisioning/*
 	mkisofs -output $@ -volid cidata -joliet -rock $^
 
 # fake the snap4.tar.gz
-snap4.tar.gz: snap/Genera-8-5.vlod snap/VLM_debugger snap/genera
-	tar cjf $@ snap
+snap4.tar.gz: snap4/Genera-8-5.vlod snap4/VLM_debugger snap4/genera
+	tar czf $@ snap4
 
 # use a version with NFSv3 support
 # see more in http://www.jachemich.de/vlm/genera.html
-snap/Genera-8-5.vlod:
+snap4/Genera-8-5.vlod:
 	curl -L "http://www.jachemich.de/vlm/distribution.vlod" -o $@
 
 # fake the opengenera2.tar.gz
@@ -38,8 +39,8 @@ snap/Genera-8-5.vlod:
 opengenera2.tar.gz:
 	curl -L "https://archives.loomcom.com/genera/var_lib_symbolics.tar.gz" -o $@
 
-snap/genera:
+snap4/genera:
 	curl -L "http://www.jachemich.de/vlm/genera" -o $@
 
-snap/VLM_debugger:
+snap4/VLM_debugger:
 	curl -L "https://archives.loomcom.com/genera/worlds/VLM_debugger" -o $@

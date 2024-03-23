@@ -3,7 +3,7 @@
 set -e
 
 SOURCES=/tmp/genera # change this by demand
-PFILES=$SOURCES/provisioning
+PFILES=$SOURCES
 
 # mount genera files
 # mkdir -pv $SOURCES
@@ -12,7 +12,7 @@ PFILES=$SOURCES/provisioning
 echo "install base packages"
 apt-get update && apt-get install -y curl vnc4server nfs-common nfs-kernel-server inetutils-inetd ratpoison xterm
 
-if [[ ! -d "/opt/og2" ]]; then
+if [ ! -d "/opt/symbolics" ]; then
   echo "expand opengenera"
   cd /opt; tar xfz $SOURCES/opengenera2.tar.gz
 fi
@@ -22,7 +22,7 @@ fi
 #   cd $SOURCES; curl -O http://www.unlambda.com/download/genera/snap4.tar.gz
 # fi
 
-if [[ ! -d "/opt/snap4" ]]; then
+if [ ! -d "/opt/snap4" ]; then
   echo "expand snap4"
   cd /opt; tar xfz $SOURCES/snap4.tar.gz
 fi
@@ -46,17 +46,17 @@ cp $PFILES/exports /etc/exports
 chmod 0644 /etc/exports
 
 echo "bounce nfs"
-/etc/init.d/nfs-user-server restart
+/etc/init.d/nfs-kernel-server restart
 
 echo "/opt/snap4/.VLM"
 cp $PFILES/dotVLM /opt/snap4/.VLM
 chmod 0644 /opt/snap4/.VLM
 
-if [[ ! -d "/var/lib/symbolics" ]]; then
+if [ ! -d "/var/lib/symbolics" ]; then
   echo "configure og2 image"
   SDIR=/var/lib/symbolics
   cp -R /opt/snap4 $SDIR; 
-  cp -R /opt/og2/sys.sct $SDIR; 
+  cp -R /opt/symbolics/sys.sct $SDIR; 
   mkdir $SDIR/rel-8-5; 
   ln -s $SDIR/sys.sct $SDIR/rel-8-5/sys.sct; 
   cp $PFILES/run-genera $SDIR;
@@ -82,6 +82,6 @@ echo 'rm -f /root/.vnc/genera-host:1.pid' > /etc/rc.local
 echo 'HOME=/root vncserver -geometry 1150x900' >> /etc/rc.local
 
 echo "start opengenera under vnc"
-if [[ ! -f "/root/.vnc/genera-host:1.pid" ]]; then
+if [ ! -f "/root/.vnc/genera-host:1.pid" ]; then
   HOME=/root vncserver -geometry 1150x900
 fi
