@@ -3,40 +3,43 @@
 # most of these targets are pseudotargets, and make will always think they are out of date.
 # bash conditionals are liberally applied to avoid rebuilding things too often.
 
-BASEBOX=ubuntu-7.10-server-amd64
+SSH_PORT=2333
+VNC_PORT=5902
 
-all: opengenera-box opengenera2.tar.bz2
+CLOUD_IMG_LINK="https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img"
+
+all: qemu-install
 
 clean:
-	vagrant destroy
-	vagrant box remove opengenera
-	rm -f *.box snap4.tar.gz
-	echo "the iso directory can be removed"
+	rm -rf img/*
+	rm snap4.tar.gz
+	rm 
 
-# vagrant is a tool for automating virtualbox
-vagrant:
-	if test -z "$$(which vagrant)" ; then \
-	  echo "### need to install vagrant"; \
-	  echo "try: sudo gem install vagrant"; \
-	fi
+qemu-install: img/genera.img img/cidata.iso
+	qemu-system-x86_64 -m 4G -hda img/genera.img -cdrom img/cidata.iso -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::$(SSH_PORT)-:22,hostfwd=tcp::$(VNC_PORT)-:5901 -nographic
 
-# veewee might download an OS image. don't let make auto delete it, it's big!
-.PRECIOUS: %.iso
+img/genera.img:
+	curl -L $(CLOUD_IMG_LINK) -o $@
 
-$(BASEBOX).box:
-	if test -z "$$(which veewee)" ; then \
-	  echo "### need to install veewee"; \
-	  echo "try: sudo gem install veewee"; \
-	else \
-	  echo "### need to build $(BASEBOX).box"; \
-	  veewee vbox build --force $(BASEBOX); \
-	  veewee vbox validate $(BASEBOX); \
-	  veewee vbox export   $(BASEBOX); \
-	fi
+img/cidata.iso: meta-data user-data provision.sh snap4.tar.gz opengenera2.tar.gz provisioning/*
+	mkisofs -output $@ -volid cidata -joliet -rock $^
 
-# test that the opengenera box is installed. make it if not.
-opengenera-box: vagrant
-	if test -z "$$(vagrant box list | grep -w opengenera)" ; then \
-	  make $(BASEBOX).box; \
-	  vagrant box add opengenera $(BASEBOX).box; \
-	fi
+# fake the snap4.tar.gz
+snap4.tar.gz: snap/Genera-8-5.vlod snap/VLM_debugger snap/genera
+	tar cjf $@ snap
+
+# use a version with NFSv3 support
+# see more in http://www.jachemich.de/vlm/genera.html
+snap/Genera-8-5.vlod:
+	curl -L "http://www.jachemich.de/vlm/distribution.vlod" -o $@
+
+# fake the opengenera2.tar.gz
+# see more in https://archives.loomcom.com/genera/genera-install.html
+opengenera2.tar.gz:
+	curl -L "https://archives.loomcom.com/genera/var_lib_symbolics.tar.gz" -o $@
+
+snap/genera:
+	curl -L "http://www.jachemich.de/vlm/genera" -o $@
+
+snap/VLM_debugger:
+	curl -L "https://archives.loomcom.com/genera/worlds/VLM_debugger" -o $@

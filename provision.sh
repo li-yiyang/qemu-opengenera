@@ -2,21 +2,25 @@
 
 set -e
 
-SOURCES=/vagrant
+SOURCES=/tmp/genera # change this by demand
 PFILES=$SOURCES/provisioning
 
+# mount genera files
+# mkdir -pv $SOURCES
+# mount -v -L cidata $SOURCES
+
 echo "install base packages"
-apt-get install -y curl vnc4server nfs-common nfs-user-server inetutils-inetd ratpoison xterm
+apt-get update && apt-get install -y curl vnc4server nfs-common nfs-kernel-server inetutils-inetd ratpoison xterm
 
 if [[ ! -d "/opt/og2" ]]; then
   echo "expand opengenera"
-  cd /opt; tar xfj /vagrant/opengenera2.tar.bz2
+  cd /opt; tar xfz $SOURCES/opengenera2.tar.gz
 fi
 
-if [[ ! -f "$SOURCES/snap4.tar.gz" ]]; then
-  echo "download snap4"
-  cd $SOURCES; curl -O http://www.unlambda.com/download/genera/snap4.tar.gz
-fi
+# if [[ ! -f "$SOURCES/snap4.tar.gz" ]]; then
+#   echo "download snap4"
+#   cd $SOURCES; curl -O http://www.unlambda.com/download/genera/snap4.tar.gz
+# fi
 
 if [[ ! -d "/opt/snap4" ]]; then
   echo "expand snap4"

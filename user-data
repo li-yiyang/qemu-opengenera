@@ -1,0 +1,15 @@
+#cloud-config
+debug: true
+disable_root: false
+ssh_pwauth: true
+runcmd:
+  - sudo mkdir -pv /tmp/genera
+  - sudo mount -L cidata /tmp/genera
+  - sh /tmp/genera/provision.sh
+users:
+- name: root
+  shell: /bin/bash
+  lock_passwd: false
+  ssh_pwauth: true
+  hashed_passwd: $1$GeneraVL$Z05RdUaNZx4PeGLxgt3w41
+# root passwd is genera
