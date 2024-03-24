@@ -7,20 +7,31 @@ SSH_PORT=2333
 VNC_PORT=5902
 
 CLOUD_IMG_LINK="https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img"
+CLOUD_IMG_SIZE=20G
 
 all: qemu-install
 
-clean:
-	rm -rf img/*
+clean-soft:
+	rm -f img/cidata.iso
 	rm snap4.tar.gz
-	rm 
+
+clean: clean-soft
+	rm -f img/genera.img
+	rm -rf snap4
+	rm -f opengenera2.tar.gz
+
+.PHONY: qemu-install run clean clean-soft
+
+run:
+	qemu-system-x86_64 -m 4G -hda img/genera.img -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::$(SSH_PORT)-:22,hostfwd=tcp::$(VNC_PORT)-:5901 -nographic
 
 qemu-install: img/genera.img img/cidata.iso
 	qemu-system-x86_64 -m 4G -hda img/genera.img -cdrom img/cidata.iso -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::$(SSH_PORT)-:22,hostfwd=tcp::$(VNC_PORT)-:5901 -nographic
 
+# download ubuntu cloud img
 img/genera.img:
 	curl -L $(CLOUD_IMG_LINK) -o $@
-	qemu-img resize $@ 20G
+	qemu-img resize $@ $(CLOUD_IMG_SIZE)
 
 img/cidata.iso: meta-data user-data provision.sh snap4.tar.gz opengenera2.tar.gz provisioning/*
 	mkisofs -output $@ -volid cidata -joliet -rock $^

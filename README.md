@@ -1,36 +1,59 @@
 # Retrocomputing: Genera Lisp Machine
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Retrocomputing: Genera Lisp Machine](#retrocomputing-genera-lisp-machine)
+    - [About](#about)
+    - [Get Ready](#get-ready)
+    - [Get Set](#get-set)
+    - [Go!](#go)
+    - [Caveats](#caveats)
+- [Additional Reading](#additional-reading)
+
+<!-- markdown-toc end -->
+
 ## About
 
-Runs "opengenera2" (poorly) on Ubuntu 7.10 inside virtualbox using vagrant, veewee, and chef. The result is not especially stable, but sufficient for the casual explorer. An old version of Ubuntu is required due to a "feature" of X11 being fixed in newer versions.
+Runs "opengenera2" on Ubuntu Cloud Image inside qmeu. The result is not especially stable, but sufficient for the casual explorer. 
 
-This repository *does not include* genera. It requires that you supply a bzip2 tar archive named opengenera.tar.bz2 with the (abridged) files listed in notes/opengenera2.tar.list.
-
-## Updating
-
-If you are updating you probably need to destroy your previous virtual machine as well as the Ubuntu 7.10 basebox using ```make clean```.
+This project depends on other existing resources:
+* [Virtual Lisp Machine on Linux](http://www.jachemich.de/vlm/genera.html)
+  provides a Lisp Machine World with NFSv3 support
+* [Running Open Genera 2.0 on Linux](https://archives.loomcom.com/genera/genera-install.html)
+  mainly reference
+* [Provisions a Ubuntu 20.04 VM in QEMU on Mac OSX using Cloud-Init](https://gist.github.com/relyt0925/c761f5b5b3ce5363650ab6444bf7d159)
+  reference for qemu usage
 
 ## Get Ready
-To launch a virtualbox VM running genera:
+To launch a qemu VM running genera:
 
-  * Install the latest [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-  * Install the latest [Vagrant](https://www.vagrantup.com/downloads.html)
-  * Install veewee: ```sudo gem install veewee```
+* Ensure qemu in your system: `brew install qemu`
+* Download resouces and build up `make qemu-install`
+* For normal usage, just run `make run` might be okay
 
-  * ```make && vagrant up```
+Here are some detailed infomation:
+* This will download an ubuntu bionic server cloud image
+  * change `CLOUD_IMG_LINK` for other cloud image should be avaliable
+  * The `CLOUD_IMG_SIZE` is `20G`, change it or use `qemu-img resize`
+* The configuration is automated by `user-data`. 
+* The port forward is `SSH_PORT` (`2333`), `VNC_PORT` (`5902`)
+* The installation needs network to download files
 
-This will create an ubuntu-7.10-server-amd64 drive image that is staged for use with vagrant. Practically this means sizing a new disk image, installing the OS with specific settings, installing some base ruby packages, creating a vagrant user, etc (http://vagrantup.com/v1/docs/base_boxes.html). This takes approximately a half hour on a Core 2 Duo. Vagrant will then launch this image in virtual box and set up port forwarding (2222 -> vm 22, 5902 -> vm 5901). On launch, provision.sh jumps through some hoops to set up Open Genera (see notes/*), and run it inside a VNC session.
-
-Building the image involves pulling files from the Internet, which introduces uncertainty. If you're having trouble completing this step, compare your build output with one possible successful output at ```notes/full-make.log```.
+Building the image involves pulling files from the Internet, which introduces uncertainty. 
 
 ## Get Set
 After the server is running, you can use Open Genera by opening:
 
-    vnc://localhost:5902 password "genera"
+```shell
+vnc://localhost:5902 password "genera"
+```
 
-If OG failed to launch successfully you will only see a white screen with a black status bar at the bottom. If this happens it will probably restart successfully using:
+If failed to launch successfully you will only see a white screen with a black status bar at the bottom. If this happens it will probably restart successfully using:
 
-    vagrant ssh -c restart-genera
+```shell
+restart-genera # currently should in vm
+```
 
 On a successful launch you will have a screen filled with pleasantly styled text. The resolution will be 1150x900, which was the native resolution of the Symbolics 3600. You should then configure the system as follows:
 
@@ -48,7 +71,9 @@ See [TOUR](TOUR.md) for a quick guide on how to get started with the included us
 
 ## Caveats
 
-```Save World``` will not succeed, and if it does it will not restore, and if it does then you are a lucky user! Fortunately everything is inside VirtualBox, which will let you pause, resume, and snapshot the world. While not as satisfying as using the original mechanisms, these VirtualBox capabilities are more powerful than the originals.
+```Save World``` will not succeed, and if it does it will not restore, and if it does then you are a lucky user! 
+
+(Note: i am quite new to qemu, but you may use qemu snapshot to do the save world things. )
 
 # Additional Reading
 

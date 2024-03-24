@@ -56,7 +56,8 @@ if [ ! -d "/var/lib/symbolics" ]; then
   echo "configure og2 image"
   SDIR=/var/lib/symbolics
   cp -R /opt/snap4 $SDIR; 
-  cp -R /opt/symbolics/sys.sct $SDIR; 
+  cp -R /opt/symbolics/sys.sct $SDIR;
+  chmod a+x $SDIR/genera
   mkdir $SDIR/rel-8-5; 
   ln -s $SDIR/sys.sct $SDIR/rel-8-5/sys.sct; 
   cp $PFILES/run-genera $SDIR;
