@@ -1,8 +1,11 @@
 #!/bin/bash
 
-wd=/var/lib/symbolics
-pidfile="$wd/genera.pid"
-exec="$wd/genera"
+# wd=/var/lib/symbolics
+# pidfile="$wd/genera.pid"
+# exec="$wd/genera"
 
-sudo start-stop-daemon --stop --quiet --pidfile $pidfile
+# sudo start-stop-daemon --stop --quiet --pidfile $pidfile
+# sleep 2
+
+vncserver -kill :1
 sleep 2

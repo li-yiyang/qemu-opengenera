@@ -12,7 +12,6 @@ bootcmd:
   - sudo ip link set dev tap0 up
   - rm -f /root/.vnc/genera-host:1.pid
   - HOME=/root vncserver -geometry 1440x900
-  - 
 users:
 - name: root
   shell: /bin/bash

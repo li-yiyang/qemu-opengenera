@@ -1,8 +1,8 @@
 #!/bin/bash
 
 wd=/var/lib/symbolics
-pidfile="$wd/genera.pid"
-exec="$wd/genera"
+#pidfile="$wd/genera.pid"
+#exec="$wd/genera"
 
-$wd/stop-genera
+#$wd/stop-genera
 $wd/run-genera

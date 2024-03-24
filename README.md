@@ -10,6 +10,9 @@
     - [Go!](#go)
     - [Caveats](#caveats)
 - [Additional Reading](#additional-reading)
+- [ScreenShorts](#screenshorts)
+    - [Mine](#mine)
+    - [Older Version](#older-version)
 
 <!-- markdown-toc end -->
 
@@ -81,6 +84,13 @@ See [TOUR](TOUR.md) for a quick guide on how to get started with the included us
 
 http://www.textfiles.com/bitsavers/pdf/symbolics/
 
+# ScreenShorts
+## Mine
+![ryo-genera](./ryo-genera.png)
+
+You can define site (here is `Ryo` for mine) in Open Genera.
+
+## Older Version
 ![splash screen](https://github.com/ynniv/opengenera/raw/master/screenshots/splash%20screen.png)
 ![documentation viewer](https://github.com/ynniv/opengenera/raw/master/screenshots/document%20examiner.png) 
 ![graphical program output](https://github.com/ynniv/opengenera/raw/master/screenshots/sample%20program.png)

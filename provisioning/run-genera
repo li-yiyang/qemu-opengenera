@@ -1,8 +1,10 @@
 #!/bin/bash
 
 wd=/var/lib/symbolics
-cmd="DISPLAY=:1 ./genera  2>&1 > genera.log"
-pidfile="$wd/genera.pid"
-exec="$wd/genera"
-sudo start-stop-daemon --start --quiet --pidfile $pidfile --exec $exec --chuid 0 --background --make-pidfile --startas $exec -- $cmd
+# cmd="DISPLAY=:1 ./genera  2>&1 > genera.log"
+# pidfile="$wd/genera.pid"
+# exec="$wd/genera"
+# sudo start-stop-daemon --start --quiet --pidfile $pidfile --exec $exec --chuid 0 --background --make-pidfile --startas $exec -- $cmd
 
+$wd/stop-genera
+xterm -e "sudo DISPLAY=:1 ./genera" &
