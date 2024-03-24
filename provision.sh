@@ -10,7 +10,7 @@ PFILES=$SOURCES
 # mount -v -L cidata $SOURCES
 
 echo "install base packages"
-apt-get update && apt-get install -y curl vnc4server nfs-common nfs-kernel-server inetutils-inetd ratpoison xterm
+apt-get update && apt-get install -y curl vnc4server nfs-common nfs-kernel-server inetutils-inetd xterm
 
 if [ ! -d "/opt/symbolics" ]; then
   echo "expand opengenera"
@@ -62,6 +62,8 @@ if [ ! -d "/var/lib/symbolics" ]; then
   ln -s $SDIR/sys.sct $SDIR/rel-8-5/sys.sct; 
   cp $PFILES/run-genera $SDIR;
   ln -s $SDIR/run-genera /usr/local/bin
+  cp $PFILES/stop-genera $SDIR;
+  ln -s $SDIR/stop-genera /usr/local/bin
   cp $PFILES/restart-genera $SDIR
   ln -s $SDIR/restart-genera /usr/local/bin
 fi
@@ -78,11 +80,17 @@ chmod 0755 /root/.vnc/xstartup
 echo "allow global write to genera files"
 chmod ugo+w -R /var/lib/symbolics/sys.sct
 
+# this is done in bootcmd
+# echo "setup network interface"
+# sudo ip tuntap add dev tap0 mode tap
+# sudo ip addr add 10.0.0.1/24 dev tap0
+# sudo ip link set dev tap0 up
+
 echo "clear vnc.pid on startup"
 echo 'rm -f /root/.vnc/genera-host:1.pid' > /etc/rc.local
-echo 'HOME=/root vncserver -geometry 1150x900' >> /etc/rc.local
+echo 'HOME=/root vncserver -geometry 1440x900' >> /etc/rc.local
 
 echo "start opengenera under vnc"
 if [ ! -f "/root/.vnc/genera-host:1.pid" ]; then
-  HOME=/root vncserver -geometry 1150x900
+  HOME=/root vncserver -geometry 1440x900
 fi

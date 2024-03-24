@@ -4,5 +4,5 @@ wd=/var/lib/symbolics
 pidfile="$wd/genera.pid"
 exec="$wd/genera"
 
-$wd/stop-genera
-$wd/run-genera
+sudo start-stop-daemon --stop --quiet --pidfile $pidfile
+sleep 2

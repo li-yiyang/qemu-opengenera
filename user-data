@@ -6,6 +6,13 @@ runcmd:
   - sudo mkdir -pv /tmp/genera
   - sudo mount -L cidata /tmp/genera
   - sh /tmp/genera/provision.sh
+bootcmd:
+  - sudo ip tuntap add dev tap0 mode tap
+  - sudo ip addr add 10.0.0.1/24 dev tap0
+  - sudo ip link set dev tap0 up
+  - rm -f /root/.vnc/genera-host:1.pid
+  - HOME=/root vncserver -geometry 1440x900
+  - 
 users:
 - name: root
   shell: /bin/bash

@@ -15,11 +15,12 @@ xmodmap -e "keycode 0x74 = Super_R" # right Command
 xmodmap -e "keycode 0x16 = Delete" # BackSpace
 xmodmap -e "keycode 0x6B = BackSpace" # Delete
 
-ratpoison &
-sleep 2
+# ratpoison &
+# sleep 2
 
-xterm &
+# xterm &
 
 cd /var/lib/symbolics
-xterm -e /var/lib/symbolics/run-genera &
+# i guess i need to make a better chioce
+xterm -e "DISPLAY=:1 ./genera" &
 
