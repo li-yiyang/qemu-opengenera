@@ -12,8 +12,8 @@ xsetroot -solid grey
 xmodmap -e "keycode 0x73 = Super_L" # left Command
 xmodmap -e "keycode 0x74 = Super_R" # right Command
 
-#xmodmap -e "keycode 0x16 = Delete" # BackSpace
-#xmodmap -e "keycode 0x6B = BackSpace" # Delete
+xmodmap -e "keycode 0x16 = Delete" # BackSpace
+xmodmap -e "keycode 0x6B = BackSpace" # Delete
 
 ratpoison &
 sleep 2

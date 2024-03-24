@@ -24,6 +24,8 @@ This project depends on other existing resources:
   mainly reference
 * [Provisions a Ubuntu 20.04 VM in QEMU on Mac OSX using Cloud-Init](https://gist.github.com/relyt0925/c761f5b5b3ce5363650ab6444bf7d159)
   reference for qemu usage
+* [vagrant-opengenera](https://github.com/ynniv/vagrant-opengenera)
+  the original repo
 
 ## Get Ready
 To launch a qemu VM running genera:

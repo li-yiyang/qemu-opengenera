@@ -1,7 +1,7 @@
 #!/bin/bash
 
 wd=/var/lib/symbolics
-cmd="HOME=/root DISPLAY=:1 ./genera -geometry 1150x900 2>&1 > genera.log"
+cmd="DISPLAY=:1 ./genera  2>&1 > genera.log"
 pidfile="$wd/genera.pid"
 exec="$wd/genera"
 sudo /sbin/start-stop-daemon --start --background --quiet --oknodo \
