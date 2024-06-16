@@ -86,7 +86,7 @@ http://www.textfiles.com/bitsavers/pdf/symbolics/
 
 # ScreenShorts
 ## Mine
-![ryo-genera](./ryo-genera.png)
+![ryo-genera](./screenshots/Ryo-genera.png)
 
 You can define site (here is `Ryo` for mine) in Open Genera.
 
